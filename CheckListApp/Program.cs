@@ -18,7 +18,7 @@ Käyttäjän syötteiden perusteella ohjelman tulee lisätä, poistaa tai merkit
 
     Tehtävän lisäämisen yhteydessä käyttäjä syöttää tehtävän kuvauksen (esim. "Osta maitoa").
 
-    Kun tehtävä merkitään tehdyksi, se tulostuu listassa eri tavalla (esim. ✔ tai [X]).
+    Kun tehtävä merkitään tehdyksi, se tulostuu listassa eri tavalla (esim. [X]).
 
     Jos käyttäjä yrittää poistaa tai merkitä tehtäväksi numeron, jota ei ole olemassa, ohjelma näyttää virheilmoituksen.
 
@@ -29,9 +29,56 @@ using CheckListApp;
 using Task = CheckListApp.Task;
 
 
-    
+
+class Program
 {
-        Console.WriteLine("Valitse vaihtoehdoista");
+    static Task manager = new Task();
+
+    static void Main()
+    {
+        bool running = true;
+        
+        while (running)
+        {
+            Console.Clear();
+            ShowMenu();
+            string choice = Console.ReadLine();
+            Console.Clear();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Write("Anna tehtävän kuvaus: ");
+                    string desc = Console.ReadLine();
+                    manager.AddTask(desc);
+                    break;
+                case "2":
+                    manager.ShowTasks();
+                    break;
+                case "3":
+                    manager.ShowTasks();
+                    Console.Write("Anna poistettavan tehtävän numero: ");
+                    TryParseAndExecute(manager.RemoveTask);
+                    break;
+                case "4":
+                    manager.ShowTasks();
+                    Console.Write("Anna tehtävän numero: ");
+                    TryParseAndExecute(manager.CompleteTask);
+                    break;
+                case "5":
+                    return;
+                default:
+                    Console.WriteLine("Virheellinen valinta.");
+                    break;
+            }
+            Console.WriteLine("Paina Enter jatkaaksesi...");
+            Console.ReadLine();
+        }
+    }
+
+    static void ShowMenu()
+    {
+        Console.WriteLine("VALITSE");
         // Kysytään vaihtoehdot
         Console.WriteLine("\t1. Lisää uusi tehtävä");
         Console.WriteLine("\t2. Näytä kaikki tehtävät");
@@ -39,32 +86,18 @@ using Task = CheckListApp.Task;
         Console.WriteLine("\t4. Merkitse tehtävä tehdyksi");
         Console.WriteLine("\t5. Poistu ohjelmasta");
         Console.WriteLine("Kirjoita valintasi:");
-        
-        // Luetaan annettu vaihtoehto ja tallennetaan se op-muuttujaan
-        string? op = Console.ReadLine();
-   
-        while (true)
+    }
+    static void TryParseAndExecute(Action<int> action)
+    {
+        if (int.TryParse(Console.ReadLine(), out int id))
         {
-                try
-                {
-                    switch (op)
-                    {
-                        case "1": Task.AddTask(); break;
-                        case "2": Task.ShowTasks(); break;
-                        case "3": Task.RemoveTask(); break;
-                        case "4": Task.CompleteTask(); break;
-                        case "5": return;
-                        default: Console.WriteLine("Virheellinen valinta, yritä uudelleen."); break;
-                    }
-                    Console.WriteLine("Paina Enter jatkaaksesi...");
-                    Console.ReadLine();
-                
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+            action(id);
         }
+        else
+        {
+            Console.WriteLine("Virheellinen syöte.");
+        }
+    }
+
 
 }

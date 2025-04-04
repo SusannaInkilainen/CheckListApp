@@ -8,7 +8,7 @@ public class TaskItem
 
         public override string ToString()
         {
-            return $"{Id}. {Description} {(IsCompleted ? "[✔]" : "[ ]")}";
+            return $"{Id}. {Description} {(IsCompleted ? "[X]" : "[ ]")}";
         }
     
 }

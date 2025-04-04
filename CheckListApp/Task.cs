@@ -5,54 +5,42 @@ public class Task()
     static List<TaskItem> tasks = new List<TaskItem>();
     static int nextId = 1;
 
-    public static void AddTask()
+    public void AddTask(string description)
     {
-        Console.Write("Anna tehtävän kuvaus: ");
-        string description = Console.ReadLine();
         tasks.Add(new TaskItem { Id = nextId++, Description = description, IsCompleted = false });
-        Console.WriteLine("Tehtävä lisätty!");
     }
 
-    public static void ShowTasks()
+    public void ShowTasks()
     {
         if (tasks.Count == 0)
         {
             Console.WriteLine("Ei tehtäviä.");
             return;
         }
+
         foreach (var task in tasks)
         {
             Console.WriteLine(task);
         }
     }
 
-    public static void RemoveTask()
+    public void RemoveTask(int id)
     {
-        Console.Write("Anna poistettavan tehtävän numero: ");
-        if (int.TryParse(Console.ReadLine(), out int id))
+        var task = tasks.Find(t => t.Id == id);
+        if (task != null)
         {
-            var task = tasks.Find(t => t.Id == id);
-            if (task != null)
-            {
-                tasks.Remove(task);
-                Console.WriteLine("Tehtävä poistettu.");
-            }
-            else
-            {
-                Console.WriteLine("Tehtävää ei löytynyt.");
-            }
+            tasks.Remove(task);
+            Console.WriteLine("Tehtävä poistettu.");
         }
         else
         {
-            Console.WriteLine("Virheellinen syöte.");
+            Console.WriteLine("Tehtävää ei löytynyt.");
         }
     }
 
-    public static void CompleteTask()
+    public void CompleteTask(int id)
     {
-        Console.Write("Anna tehtävän numero: ");
-        if (int.TryParse(Console.ReadLine(), out int id))
-        {
+        
             var task = tasks.Find(t => t.Id == id);
             if (task != null)
             {
@@ -63,10 +51,6 @@ public class Task()
             {
                 Console.WriteLine("Tehtävää ei löytynyt.");
             }
-        }
-        else
-        {
-            Console.WriteLine("Virheellinen syöte.");
-        }
+        
     }
 }
